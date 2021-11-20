@@ -1,6 +1,7 @@
 import 'package:cassava_app/screen/photo_screen.dart';
 import 'package:cassava_app/screen/report_screen.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_svg/svg.dart";
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,8 +17,44 @@ class _HomeScreenState extends State<HomeScreen> {
     const Photo(),
     const Report(),
   ];
+
   @override
   Widget build(BuildContext context) {
+    final Widget homeUnselectedIcon = SvgPicture.asset(
+        "assets/icons/home_outline_icon.svg",
+        width: 24,
+        height: 24,
+        color: Theme.of(context).colorScheme.secondary);
+    final Widget homeSelectedIcon = SvgPicture.asset(
+      "assets/icons/home_outline_icon.svg",
+      width: 24,
+      height: 24,
+      color: Theme.of(context).colorScheme.primary,
+    );
+    final Widget leafUnselectedIcon = SvgPicture.asset(
+      "assets/icons/leaf_outline_icon.svg",
+      width: 24,
+      height: 24,
+      color: Theme.of(context).colorScheme.secondary,
+    );
+    final Widget leafSelectedIcon = SvgPicture.asset(
+      "assets/icons/leaf_outline_icon.svg",
+      width: 24,
+      height: 24,
+      color: Theme.of(context).colorScheme.primary,
+    );
+    final Widget cameraUnSelectedIcon = SvgPicture.asset(
+      "assets/icons/camera_outline_icon.svg",
+      width: 24,
+      height: 24,
+      color: Theme.of(context).colorScheme.secondary,
+    );
+    final Widget cameraSelectedIcon = SvgPicture.asset(
+      "assets/icons/camera_outline_icon.svg",
+      width: 24,
+      height: 24,
+      color: Theme.of(context).colorScheme.primary,
+    );
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cassava App'),
@@ -31,21 +68,23 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: onTabTappend,
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Theme.of(context).colorScheme.secondary,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            // activeIcon: Icon()
-            icon: Icon(Icons.home),
+            activeIcon: homeSelectedIcon,
+            icon: homeUnselectedIcon,
             label: "Inicio",
             backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_a_photo),
-            label: "Capture",
+            activeIcon: cameraSelectedIcon,
+            icon: cameraUnSelectedIcon,
+            label: "Diagnósticos",
             backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.assessment_rounded),
-            label: "Report",
+            activeIcon: leafSelectedIcon,
+            icon: leafUnselectedIcon,
+            label: "Diagnosticar",
             backgroundColor: Colors.white,
           ),
         ],
