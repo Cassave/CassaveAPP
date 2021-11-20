@@ -24,14 +24,30 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        elevation: 20,
+        // selectedLabelStyle: Theme.of(context).textTheme.caption,
+        type: BottomNavigationBarType.shifting,
         currentIndex: _currentIndex,
         onTap: onTabTappend,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "HOME"),
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Theme.of(context).colorScheme.secondary,
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.add_a_photo), label: "CAPTURE"),
+            // activeIcon: Icon()
+            icon: Icon(Icons.home),
+            label: "Inicio",
+            backgroundColor: Colors.white,
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.assessment_rounded), label: "REPORT"),
+            icon: Icon(Icons.add_a_photo),
+            label: "Capture",
+            backgroundColor: Colors.white,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.assessment_rounded),
+            label: "Report",
+            backgroundColor: Colors.white,
+          ),
         ],
       ),
     );
@@ -48,9 +64,12 @@ class CustomScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.green.shade300,
+      color: Theme.of(context).colorScheme.background,
       child: const Center(
-        child: Text('Pagina de Inicio'),
+        child: Text(
+          'Text with a background color',
+          // style: Theme.of(context).textTheme.headline1,
+        ),
       ),
     );
   }
