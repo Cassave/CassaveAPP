@@ -78,13 +78,13 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             activeIcon: cameraSelectedIcon,
             icon: cameraUnSelectedIcon,
-            label: "Diagnósticos",
+            label: "Diagnosticar",
             backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
             activeIcon: leafSelectedIcon,
             icon: leafUnselectedIcon,
-            label: "Diagnosticar",
+            label: "Diagnósticos",
             backgroundColor: Colors.white,
           ),
         ],

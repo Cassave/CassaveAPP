@@ -1,0 +1,15 @@
+{
+    "disease":{
+        "label": 1,
+        "label_name": "Mosaico Común",
+        "description":"Enfermedad causada por el virus CsCMV, del grupo de los Potexvirus. Desarrollan síntomas de mosaico y clorosis (manchas amarillas en la hoja). La presencia de este virus puede significar  un crecimiento reducido de la planta y del tubérculo."
+    },
+    "symptoms": "Desarrollo de clorosis o aparición de manchas de color amarillo o verde claro en las hojas de la planta de Yuca. Aquellas plantas afectadas presentarán una reducción considerable de su tamaño y el del tubérculo. Estos síntomas serán más severos en climas fríos, pues es más favorable para el virus.",
+    "vectors": "Se propaga fácilmente al usar material vegetal infectado. Del mismo modo, su estabilidad le permite ser transmitido a través de implementos usados en labores agrícolas. Otra vector de transmisión es la mosca blanca.",
+    "treatment": "No existe un tratamiento que elimine directamente al virus, sin embargo, se puede evitar a partir de la higiene de los implementos de labores agrícolas, el uso de esquejes no infectados y ejecución de tratamientos biológicos para el manejo de vectores de transmisión biológicos.",
+    "recommendations":[
+        "Usar esquejes sanos, en terrenos sanos.",
+        "Identificar aquellas plantas afectadas por este virus, y  eliminarlas, quemarlas es una buena opción.",
+        "Evitar cultivar en terrenos vecinos a áreas infectados."
+    ]
+}
