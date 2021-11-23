@@ -1,9 +1,15 @@
+// ignore_for_file: avoid_print
+
+import 'dart:convert';
 import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class Photo extends StatefulWidget {
   const Photo({Key? key}) : super(key: key);
@@ -44,6 +50,205 @@ class _PhotoState extends State<Photo> {
     });
 
     Navigator.of(context).pop();
+  }
+
+  Dio dio = new Dio();
+
+  void getHttp() async {
+    try {
+      var response = await Dio().get('https://cassave.herokuapp.com/');
+      print(response);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> subir_imagen() async {
+    try {
+      String filename = imagen!.path.split('/').last;
+
+      FormData formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(imagen!.path, filename: filename)
+      });
+
+      Response response = await dio.post('http://cassave.herokuapp.com/predict',
+          data: formData);
+      var id = response.data["label"];
+      print(id);
+      var titulo = response.data["title"];
+      var description = response.data["description"];
+
+      if (id == "4") {
+        mostrarSana(titulo, description);
+      } else {
+        var symptoms = response.data["symptoms"];
+        var treatment = response.data["treatment"];
+        List<dynamic> recommendation = response.data["recommendation"];
+        mostrar(titulo, description, symptoms, treatment, recommendation);
+      }
+
+      print(response.data);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void mostrar(String titulo, String description, String symptoms,
+      String treatment, List recommendation) {
+    showModalBottomSheet<void>(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(32), topRight: Radius.circular(32)),
+        ),
+        isScrollControlled: true,
+        backgroundColor: Colors.white,
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 600,
+            padding: const EdgeInsets.all(16),
+            child: ListView(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          image: DecorationImage(
+                            image: FileImage(imagen!),
+                            fit: BoxFit.cover,
+                          )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                      child: Text(
+                        titulo,
+                        style: Theme.of(context).textTheme.headline4,
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                      child: Text(
+                        description,
+                        style: Theme.of(context).textTheme.bodyText1,
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                      child: Text(
+                        'Sintomas',
+                        style: Theme.of(context).textTheme.headline5,
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                      child: Text(
+                        symptoms,
+                        style: Theme.of(context).textTheme.bodyText1,
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                      child: Text(
+                        'Tratamiento',
+                        style: Theme.of(context).textTheme.headline5,
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                      child: Text(
+                        treatment,
+                        style: Theme.of(context).textTheme.bodyText1,
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                      child: Text(
+                        'Recomendaciones',
+                        style: Theme.of(context).textTheme.headline5,
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                      child: Column(
+                        children: <Widget>[
+                          for (var items in recommendation)
+                            Text(
+                              '\u2022 $items',
+                              style: Theme.of(context).textTheme.bodyText1,
+                              textAlign: TextAlign.left,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  void mostrarSana(String titulo, String description) {
+    showModalBottomSheet<void>(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(32), topRight: Radius.circular(32)),
+        ),
+        isScrollControlled: true,
+        backgroundColor: Colors.white,
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 600,
+            padding: const EdgeInsets.all(16),
+            child: ListView(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          image: DecorationImage(
+                            image: FileImage(imagen!),
+                            fit: BoxFit.cover,
+                          )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                      child: Text(
+                        titulo,
+                        style: Theme.of(context).textTheme.headline4,
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                      child: Text(
+                        description,
+                        style: Theme.of(context).textTheme.bodyText1,
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   opciones(context) {
@@ -156,61 +361,8 @@ class _PhotoState extends State<Photo> {
                     color: Theme.of(context).colorScheme.primary, width: 2.0),
               ),
               onPressed: () {
-                if (imagen != null) {
-                  // Make POST to API
-
-                  // Fake POST and Response
-                  readJson();
-                  _data.isNotEmpty
-                      ? (showModalBottomSheet<void>(
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(32),
-                                topRight: Radius.circular(32)),
-                          ),
-                          backgroundColor: Colors.white,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Container(
-                              height: 600,
-                              padding: const EdgeInsets.all(16),
-                              child: ListView(
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        height: 200,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                            image: DecorationImage(
-                                              image: FileImage(imagen!),
-                                              fit: BoxFit.cover,
-                                            )),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 16, 0, 16),
-                                        child: Text(
-                                          _data["disease"]["label_name"]
-                                              .toString(),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline4,
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                          }))
-                      : Container();
-                }
+                getHttp();
+                subir_imagen();
               },
               child: Text(
                 'Diagnosticar',
